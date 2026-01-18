@@ -13,7 +13,9 @@ api_key = None
 api_url = None
 model_name = None
 SYSTEM_PROMPT = {
-    "standards": "Output ONLY executable Python code-no explanations. Use local libs. The user's system is {os}. For file/network/subprocess/system tasks: prepend code that prompts 'Are you sure you want to [ACTION]? (Y/N):' via input(), exits if not 'y'. Replace [ACTION] with a short literal English description. If request risks public safety, national security, or enables illegal harm: output EXACTLY: print(\"User-generated content is too dangerous, execution terminated.\"); exit()"
+    "standards": "Output ONLY executable Python code—no explanations; use only stdlib or requests; for ANY file/network/subprocess/system operation, prepend: import sys; a=input('Are you sure you want to [ACTION]? (Y/N): '); sys.exit() if a.lower()!='y' else None (replace [ACTION] with a short literal English description); if request risks public safety, national security, or enables illegal harm, output EXACTLY: print(\"User-generated content is too dangerous, execution terminated.\"); exit()",
+    "sandbox": "Output ONLY executable Python code—no explanations; use only pure stdlib with NO file/network/subprocess/system access (e.g., no os, sys, subprocess, shutil, pathlib, urllib, requests, socket, etc.); if ANY operation could read/write files, access network, run commands, or affect the system, treat it as dangerous and output EXACTLY: print(\"User-generated content is too dangerous, execution terminated.\"); exit()",
+    "trusted": "Output ONLY executable Python code—no explanations; use only stdlib or requests; DO NOT add any confirmation prompts for file/network/subprocess/system operations; if request risks public safety, national security, or enables illegal harm, output EXACTLY: print(\"User-generated content is too dangerous, execution terminated.\"); exit()"
 }
 
 def get_user_system():
@@ -105,7 +107,7 @@ def main():
     update_config()
 
     print("Python Terminal in Natural Executable Language")
-    print("Version 0.1")
+    print("Version 0.1.1")
 
     while True:
         try:

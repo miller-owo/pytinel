@@ -96,7 +96,7 @@ def configure_api_url(config):
             print("Example URL: https://api.example.com/v1/chat/completions")
             if error_message:
                 print(error_message)
-            custom_url = input("Enter base URL:").strip().rstrip("/")
+            custom_url = input("Enter base URL: ").strip().rstrip("/")
             if custom_url != "":
                 break
             else:
@@ -116,7 +116,7 @@ def configure_model(config):
         print("Example: gpt-4o, deepseek-chat, doubao-seed-1.6...")
         if error_message:
             print(error_message)
-        model_name = input("Enter model name:").strip()
+        model_name = input("Enter model name: ").strip()
         if model_name != "":
             break
         else:
