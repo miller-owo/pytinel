@@ -24,9 +24,12 @@ def init():
     APP_AUTHOR = "pytinel"
     CONFIG_DIR = Path(user_config_dir(APP_NAME, APP_AUTHOR))
     CONFIG_FILE = CONFIG_DIR / "config.json"
-    if not CONFIG_FILE.exists():
-        print(FIRST_RUN_DISCLAIMER)
-        input("Press Enter to continue…")
-        ensure_config()
+    try:
+        if not CONFIG_FILE.exists():
+            print(FIRST_RUN_DISCLAIMER)
+            input("Press Enter to continue…")
+            ensure_config()
+    except KeyboardInterrupt:
+        return
 
     

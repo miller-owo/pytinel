@@ -62,9 +62,12 @@ def ensure_config(enforce: bool = False):
     config = load_config()
     modified = False
     if enforce or not config.get("api_key", "").strip() or not config.get("base_url", "").strip() or not config.get("model", "").strip():
-        config = configure_api_url(config)
-        config = configure_model(config)
-        config = configure_api_key(config)
+        try:
+            config = configure_api_url(config)
+            config = configure_model(config)
+            config = configure_api_key(config)
+        except KeyboardInterrupt:
+            return
         modified = True
     if modified:
         save_config(config)

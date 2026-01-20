@@ -107,7 +107,7 @@ def main():
     update_config()
 
     print("Python Terminal in Natural Executable Language")
-    print("Version 0.1.3")
+    print("Version 0.1.4")
 
     while True:
         try:
