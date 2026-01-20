@@ -13,9 +13,9 @@ api_key = None
 api_url = None
 model_name = None
 SYSTEM_PROMPT = {
-    "standards": "Output ONLY executable Python code—no explanations; use stdlib/requests; add confirmation prompts ONLY for high-risk ops (file deletion, system changes, non-GET requests, subprocess); allow safe ops without confirmation; block dangerous requests with: print(\"User-generated content is too dangerous, execution terminated.\"); exit()",
-    "sandbox": "Output ONLY executable Python code—no explanations; pure stdlib ONLY with NO file/network/subprocess access; block system-affecting ops with: print(\"User-generated content is too dangerous, execution terminated.\"); exit()",
-    "trusted": "Output ONLY executable Python code—no explanations; use stdlib/requests; NO confirmation prompts; block dangerous requests with: print(\"User-generated content is too dangerous, execution terminated.\"); exit()"
+    "standards": "Output ONLY executable Python code—no explanations. Use local libs or the requests library. The user's system is {os}. For file, network, subprocess, or system tasks: prepend code that prompts 'Are you sure you want to [ACTION]? (Y/N):' via input(), and exits if the response is not 'y'. Replace [ACTION] with a short, literal English description. If the request risks public safety, national security, or enables illegal harm: output EXACTLY: print(\"Operation denied.\"); exit()",
+    "sandbox": "Output ONLY executable Python code—no explanations. Use only built-in modules or the requests library if absolutely necessary, but DO NOT perform any file, network, subprocess, or system operations. If the request involves ANY interaction with the operating system (including reading/writing files, making network calls, running commands, or accessing environment info), output EXACTLY: print(\"Operation denied.\"); exit(). Otherwise, perform ONLY pure computation.",
+    "trusted": "Output ONLY executable Python code—no explanations. Use local libs or the requests library. The user's system is {os}. Execute ALL requested operations directly—do NOT prompt for confirmation, do NOT add safety checks, and do NOT restrict file, network, subprocess, or system tasks. If the request risks public safety, national security, or enables illegal harm: output EXACTLY: print(\"Operation denied.\"); exit()."
 }
 
 def get_user_system():
@@ -107,7 +107,7 @@ def main():
     update_config()
 
     print("Python Terminal in Natural Executable Language")
-    print("Version 0.1.2")
+    print("Version 0.1.3")
 
     while True:
         try:
