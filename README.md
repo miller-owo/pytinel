@@ -6,7 +6,7 @@
 
 ## ✨ Key Features
 1.  **Natural Language to Python Execution**
-    Describe your desired operation in plain natural language, and Pytinel will silently generate and execute the corresponding Python code, returning only the final result (no intermediate code is displayed by default).
+    Describe your desired operation in plain natural language, and Pytinel will silently generate and execute the corresponding Python code, returning only the final result.
     ```
     >>> Calculate the sum of numbers from 1 to 100 and output the result
     5050
@@ -74,7 +74,41 @@ pip install pytinel
 python3 -m pip install pytinel
 ```
 
-### Option 3: Install from Source (For Development/Contribution)
+### Option 3: Install from binary (For Windows)
+A convenient installation method for Windows users via the official MSI installer — no manual Python environment configuration is required.
+
+> **System Requirements**: This software and its MSI installer are **only compatible with Windows 10 and later (64-bit)**.
+
+1. **Download the MSI installer**
+   Visit the official pytinel release page:
+   https://github.com/miller-owo/pytinel/releases
+   Download the latest 64-bit Windows MSI installer (file name pattern: `pytinel-<version>-windows-<architecture>.msi`).
+
+2. **Run the installer**
+   Double-click the downloaded MSI file to launch the setup wizard:
+   - Follow the on-screen prompts (click **Next** to proceed).
+   - The default installation path is `C:\Users\[Your Username]\AppData\Local\Programs\pytinel\` (a user-level directory that requires no administrative privileges; custom paths are also supported).
+   - Click **Install** and wait for the process to complete, then click **Finish**.
+   > **Note**: The installer **automatically adds the installation directory to your user PATH environment variable** — no manual configuration or checkboxes are needed.
+
+3. **Verify the installation**
+   Close any open Command Prompt (CMD) or PowerShell windows, then open a **new** terminal window and run:
+   ```bash
+   pytinel
+   ```
+   A successful installation will display pytinel's main interface, help information, or startup prompt (instead of a "command not found" error).
+
+> **Troubleshooting**
+> If the `pytinel` command is unrecognized:
+> 1.  Ensure you are using a **newly opened** terminal window (existing windows do not detect updated PATH settings).
+> 2.  Restart your computer to force a PATH refresh (resolves most delayed PATH update issues).
+> 3.  Confirm the installation directory is in your **user PATH**:
+>     - Press `Win + R`, enter `sysdm.cpl` and hit Enter.
+>     - Go to the **Advanced** tab → **Environment Variables**.
+>     - Under **User variables**, check if the pytinel installation directory is listed in the `Path` variable.
+> 4.  If missing, manually add the installation directory to the user `Path` variable and restart your terminal or computer.
+
+### Option 4: Install from Source (For Development/Contribution)
 If you want to modify the code or use the latest unreleased version, install in editable mode from the source repository:
 ```bash
 # Clone the repository
