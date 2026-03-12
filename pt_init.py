@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2025 MELLER_OwO
+
 from pathlib import Path
 from platformdirs import user_config_dir
 from pt_config import ensure_config
@@ -29,7 +32,7 @@ def init():
             print(FIRST_RUN_DISCLAIMER)
             input("Press Enter to continue…")
             ensure_config()
-    except KeyboardInterrupt:
+    except (EOFError, KeyboardInterrupt):
         return
 
     

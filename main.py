@@ -1,21 +1,31 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2025 MELLER_OwO
+
 import os
 import subprocess
 import requests
 import platform
+from pathlib import Path
+from platformdirs import user_cache_dir
 import sys
 import tempfile
 import re
 from pt_config import initialize_key, ensure_config
 from pt_init import init
 
+APP_NAME = "pytinel"
+APP_AUTHOR = "pytinel"
+CACHE_DIR = Path(user_cache_dir(APP_NAME, APP_AUTHOR))
+LOG_FILE = CACHE_DIR / "error.log"
+
 config = None
 api_key = None
 api_url = None
 model_name = None
 SYSTEM_PROMPT = {
-    "standards": "Output ONLY executable Python code—no explanations. Use local libs or the requests library. The user's system is {os}. For file, network, subprocess, or system tasks: prepend code that prompts 'Are you sure you want to [ACTION]? (Y/N):' via input(), and exits if the response is not 'y'. Replace [ACTION] with a short, literal English description. If the request risks public safety, national security, or enables illegal harm: output EXACTLY: print(\"Operation denied.\"); exit()",
-    "sandbox": "Output ONLY executable Python code—no explanations. Use only built-in modules or the requests library if absolutely necessary, but DO NOT perform any file, network, subprocess, or system operations. If the request involves ANY interaction with the operating system (including reading/writing files, making network calls, running commands, or accessing environment info), output EXACTLY: print(\"Operation denied.\"); exit(). Otherwise, perform ONLY pure computation.",
-    "trusted": "Output ONLY executable Python code—no explanations. Use local libs or the requests library. The user's system is {os}. Execute ALL requested operations directly—do NOT prompt for confirmation, do NOT add safety checks, and do NOT restrict file, network, subprocess, or system tasks. If the request risks public safety, national security, or enables illegal harm: output EXACTLY: print(\"Operation denied.\"); exit()."
+    "standards": "Output ONLY executable Python code—no explanations. Use local libs or the requests library. The user's system is {os}. For file, network, subprocess, or system tasks: prepend code that prompts 'Are you sure you want to [ACTION]? (Y/N):' via input(), and exits if the response is not 'y'. Replace [ACTION] with a short, literal English description. Capture all errors and write them to \"{log}\". If the request risks public safety, national security, or enables illegal harm: output EXACTLY: print(\"Operation denied.\"); exit()",
+    "sandbox": "Output ONLY executable Python code—no explanations. Use only built-in modules or the requests library if absolutely necessary, but DO NOT perform any file, network, subprocess, or system operations. Capture all errors and write them to \"{log}\". If the request involves ANY interaction with the operating system (including reading/writing files, making network calls, running commands, or accessing environment info), output EXACTLY: print(\"Operation denied.\"); exit(). Otherwise, perform ONLY pure computation.",
+    "trusted": "Output ONLY executable Python code—no explanations. Use local libs or the requests library. The user's system is {os}. Execute ALL requested operations directly—do NOT prompt for confirmation, do NOT add safety checks, and do NOT restrict file, network, subprocess, or system tasks. Capture all errors and write them to \"{log}\". If the request risks public safety, national security, or enables illegal harm: output EXACTLY: print(\"Operation denied.\"); exit()."
 }
 
 def get_user_system():
@@ -42,7 +52,7 @@ def get_python_code_from_llm(prompt):
             "messages": [
                 {
                     "role": "system",
-                    "content": SYSTEM_PROMPT["standards"].format(os=get_user_system())
+                    "content": SYSTEM_PROMPT["standards"].format(os=get_user_system(), log=str(LOG_FILE))
                 },
                 {
                     "role": "user",
@@ -81,6 +91,8 @@ def execute_python_code(code):
             f.write(code)
             temp_file=f.name
         
+        # Please do not alter this section, as I have invested considerable effort in determining that only this specific formulation prevents errors. 
+        # Any modifications could potentially introduce unforeseen and perplexing issues!
         result = subprocess.run(
             [sys.executable, temp_file],
             stdin=None,
@@ -107,7 +119,7 @@ def main():
     update_config()
 
     print("Python Terminal in Natural Executable Language")
-    print("Version 0.1.4")
+    print("Version 0.1.5")
 
     while True:
         try:
@@ -124,7 +136,7 @@ def main():
             execute_python_code(code)
             print()
             
-        except KeyboardInterrupt:
+        except (EOFError, KeyboardInterrupt):
             print("")
             break
         except Exception as e:
