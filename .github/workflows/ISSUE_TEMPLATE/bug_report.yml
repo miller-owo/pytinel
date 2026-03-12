@@ -1,0 +1,137 @@
+name: Bug Report
+description: Report a reproducible bug in Pytinel
+labels: ["bug", "needs-triage"]
+body:
+  - type: checkboxes
+    id: prerequisites
+    attributes:
+      label: Prerequisites
+      description: Before submitting, confirm you have completed these steps
+      options:
+        - label: I have read the [README.md](https://github.com/miller-owo/pytinel/blob/main/README.md) and [CONTRIBUTING.md](https://github.com/miller-owo/pytinel/blob/main/CONTRIBUTING.md)
+          required: true
+        - label: I have searched [existing issues](https://github.com/miller-owo/pytinel/issues) to avoid duplicates
+          required: true
+        - label: I have verified the bug occurs with the latest version of Pytinel
+          required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment Information
+      description: Specify your operating system, Python version, Pytinel version, and LLM API setup
+      placeholder: |
+        OS: macOS 14.5 / Windows 11 / Ubuntu 22.04
+        Python Version: 3.10.12 / 3.11.7
+        Pytinel Version: v0.1.0 (commit hash: abc123)
+        Terminal: iTerm2 / PowerShell / bash
+        LLM API Setup: OpenAI API key configured (yes/no)
+        Encryption Status: Credentials encrypted (yes/no)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: bug_category
+    attributes:
+      label: Bug Category
+      description: Select the feature area affected by the bug
+      options:
+        - Natural Language to Python Execution
+        - Safe Execution Model (file/network/permission prompts)
+        - Credential Management (API Key storage/encryption)
+        - REPL Integration (runtime/execution environment)
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction Steps
+      description: Provide a minimal, step-by-step guide to reproduce the bug (include exact natural language commands)
+      placeholder: |
+        # Example 1 (Natural Language Execution)
+        1. Launch Pytinel: `pytinel`
+        2. Enter command: "Calculate the factorial of 7"
+        3. Press Enter to execute
+        4. Observe incorrect output/error
+
+        # Example 2 (Safe Execution Model)
+        1. Launch Pytinel: `pytinel`
+        2. Enter command: "Create a new text file named 'demo.txt' and write 'Hello Pytinel' into it"
+        3. Observe missing confirmation prompt / prompt not working
+
+        # Example 3 (Credential Management)
+        1. First run Pytinel: `pytinel`
+        2. Follow setup wizard to input OpenAI API key
+        3. Restart Pytinel
+        4. Observe API key not saved / decryption error
+
+        # Example 4 (REPL Integration)
+        1. Launch Pytinel: `pytinel`
+        2. Run multiple commands: "Calculate sum 1-100" → "Compute circle area r=5"
+        3. Observe inconsistent runtime results / REPL crash
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_behavior
+    attributes:
+      label: Expected Behavior
+      description: What you expected Pytinel to do (match core feature specs)
+      placeholder: |
+        # Example 1 (Natural Language Execution)
+        Command: "Calculate the factorial of 7" → Expected output: 5040
+
+        # Example 2 (Safe Execution Model)
+        Command: "Create demo.txt" → Expected: Confirmation prompt "Are you sure you want to create and write to file 'demo.txt'? (Y/N):"
+
+        # Example 3 (Credential Management)
+        API key saved encrypted locally → No re-prompt on restart, zero external transmission
+
+        # Example 4 (REPL Integration)
+        Consistent execution results across multiple commands in the same REPL session
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual_behavior
+    attributes:
+      label: Actual Behavior
+      description: What Pytinel actually did (include error logs/stack traces)
+      placeholder: |
+        # Example 1 (Natural Language Execution)
+        Command: "Calculate the factorial of 7" → Actual output: 120
+        Error logs: No error, just incorrect calculation
+
+        # Example 2 (Safe Execution Model)
+        Command: "Create demo.txt" → Actual: No prompt, file created immediately (violates safe execution)
+        OR
+        Prompt appears but input Y/N has no effect
+
+        # Example 3 (Credential Management)
+        API key not saved → Setup wizard re-appears on every launch
+        OR
+        Error: "AES decryption failed for stored credentials"
+
+        # Example 4 (REPL Integration)
+        REPL crashes after 2nd command → Traceback:
+          File "/usr/local/bin/pytinel", line 8, in <module>
+            sys.exit(main())
+          File ".../pytinel/repl.py", line 120, in main
+            exec(generated_code, self.context)
+        RuntimeError: Context corruption in REPL session
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional Context
+      description: Any other relevant information (e.g., other commands that work/fail, security concerns)
+      placeholder: |
+        - Affected commands: All file system commands skip confirmation prompt
+        - Security note: Observed API key in plaintext in ~/.pytinel/config.json (should be encrypted)
+        - REPL issue: Only occurs with Python 3.11, works on 3.10
+    validations:
+      required: false

@@ -1,0 +1,155 @@
+name: Feature Request
+description: Propose a new feature or enhancement for Pytinel
+labels: ["enhancement", "needs-triage"]
+body:
+  - type: checkboxes
+    id: prerequisites
+    attributes:
+      label: Prerequisites
+      description: Before submitting, confirm you have completed these steps
+      options:
+        - label: I have read the [README.md](https://github.com/miller-owo/pytinel/blob/main/README.md) and [CONTRIBUTING.md](https://github.com/miller-owo/pytinel/blob/main/CONTRIBUTING.md)
+          required: true
+        - label: I have searched [existing issues](https://github.com/miller-owo/pytinel/issues) to avoid duplicates
+          required: true
+
+  - type: dropdown
+    id: feature_category
+    attributes:
+      label: Feature Category
+      description: Select the feature area for your request
+      options:
+        - Natural Language to Python Execution
+        - Safe Execution Model (file/network/permission prompts)
+        - Credential Management (API Key storage/encryption)
+        - REPL Integration (runtime/execution environment)
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: use_case
+    attributes:
+      label: Use Case
+      description: Describe the problem or pain point this feature solves (include concrete examples)
+      placeholder: |
+        # Example 1 (Natural Language Execution)
+        Current limitation: Pytinel cannot parse multi-step natural language commands
+        Example:
+        - User input: "Calculate sum 1-100, multiply by 2, then round to nearest integer"
+        - Current behavior: Only executes first step (returns 5050)
+        - Pain point: Users must split commands into multiple steps, reducing efficiency
+
+        # Example 2 (Safe Execution Model)
+        Current limitation: No granular permission control for file operations
+        Example:
+        - User input: "Read data.csv and write results to output.csv"
+        - Current behavior: Single confirmation prompt for both read/write
+        - Pain point: Users can't approve read only (no write) for sensitive files
+
+        # Example 3 (Credential Management)
+        Current limitation: Only supports OpenAI API keys
+        Example:
+        - User wants to use local LLM (e.g., Llama 3) for parsing
+        - Pain point: No way to configure local model endpoints, forced to use cloud APIs
+
+        # Example 4 (REPL Integration)
+        Current limitation: No command history persistence
+        Example:
+        - User restarts Pytinel, loses all previous command history
+        - Pain point: Can't resume work or review past execution results
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed_feature
+    attributes:
+      label: Proposed Feature
+      description: Clearly describe the new feature/enhancement (align with Pytinel's core principles)
+      placeholder: |
+        # Example 1 (Natural Language Execution)
+        Enhance multi-step command parsing:
+        1. Support sequential operations in single natural language commands
+        2. Generate chained Python code (e.g., round(sum(range(1,101)) * 2))
+        3. Maintain silent execution (only return final result)
+
+        # Example 2 (Safe Execution Model)
+        Add granular permission prompts:
+        1. Split confirmation prompts by operation type (read/write/delete)
+        2. Show exact file paths in prompts (e.g., "Read /home/user/data.csv? (Y/N):")
+        3. Add "remember for session" option to avoid repeated prompts
+
+        # Example 3 (Credential Management)
+        Add local LLM support:
+        1. Extend setup wizard to configure local model endpoints (URL/port)
+        2. Maintain zero off-device transmission (no data sent to external servers)
+        3. Keep AES encryption for any API keys/tokens used for local models
+
+        # Example 4 (REPL Integration)
+        Add persistent command history:
+        1. Save command/result history to encrypted local file (~/.pytinel/history)
+        2. Add natural language command to retrieve history ("Show last 5 commands")
+        3. Preserve REPL context across sessions (optional via flag)
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_behavior
+    attributes:
+      label: Expected Behavior of the Feature
+      description: How the feature should work (include exact input/output examples)
+      placeholder: |
+        # Example 1 (Natural Language Execution)
+        User input: "Calculate sum 1-100, multiply by 2, then round to nearest integer"
+        Generated code:
+        result = round(sum(range(1, 101)) * 2)
+        print(result)
+        Execution output: 10100
+
+        # Example 2 (Safe Execution Model)
+        User input: "Read data.csv and write results to output.csv"
+        Prompt flow:
+        Are you sure you want to read file "data.csv"? (Y/N): Y
+        Are you sure you want to write to file "output.csv"? (Y/N): Y
+        (Execution proceeds only if both are approved)
+
+        # Example 3 (Credential Management)
+        Setup wizard flow:
+        1. Select LLM type: [Cloud (OpenAI) / Local (Llama/Other)]
+        2. If Local: Enter endpoint URL (http://localhost:8080)
+        3. No API key required, no data sent externally
+        4. Configuration stored encrypted locally
+
+        # Example 4 (REPL Integration)
+        User input: "Show last 5 commands"
+        Output:
+        1. Calculate the sum of numbers from 1 to 100 → 5050
+        2. Compute the area of a circle with radius 5 → 78.53975
+        3. Generate even numbers 20-40 → [20,22,...,40]
+        4. Convert "Hello World" to uppercase → 'HELLO WORLD'
+        5. Calculate factorial of 7 → 5040
+    validations:
+      required: true
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: Potential Impact
+      description: How this feature affects existing Pytinel functionality (security/execution/REPL)
+      placeholder: |
+        - Security: Maintains zero off-device data transmission (core principle)
+        - Execution: No breaking changes to existing single-step commands
+        - REPL: Preserves in-process execution model (no external subprocesses)
+        - Credentials: Continues AES encryption for all stored sensitive data
+    validations:
+      required: false
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternative Solutions (Optional)
+      description: Any alternative approaches you've considered
+      placeholder: |
+        Alternative for multi-step commands: Add a `--multi-step` flag to enable advanced parsing (disabled by default)
+    validations:
+      required: false

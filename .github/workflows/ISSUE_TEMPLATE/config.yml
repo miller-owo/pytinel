@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Pytinel Community Discussion
+    url: https://github.com/miller-owo/pytinel/discussions
+    about: Ask general questions or discuss ideas not related to bugs/features.
+  - name: Official Documentation
+    url: https://github.com/miller-owo/pytinel/blob/main/README.md
+    about: Check the docs for usage guides and API references.
