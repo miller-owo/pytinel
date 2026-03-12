@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2025 MELLER_OwO
+
 import json
 import os
 from pathlib import Path
@@ -66,7 +69,7 @@ def ensure_config(enforce: bool = False):
             config = configure_api_url(config)
             config = configure_model(config)
             config = configure_api_key(config)
-        except KeyboardInterrupt:
+        except (EOFError, KeyboardInterrupt):
             return
         modified = True
     if modified:
